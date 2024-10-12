@@ -979,16 +979,26 @@ require('lazy').setup({
           })
         end,
       },
+      cmd = { 'RemoteStart' },
     },
     {
       'nvim-telescope/telescope-file-browser.nvim',
       dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
-      config = function()
-        vim.keymap.set('n', '<space>e', function()
-          require('telescope').extensions.file_browser.file_browser()
-        end, { desc = '[E]xplore file browser' })
-      end,
+      keys = {
+        {
+          '<space>e',
+          function()
+            require('telescope').extensions.file_browser.file_browser()
+          end,
+          desc = '[E]xplore file browser',
+        },
+      },
     },
+  },
+  {
+    'S1M0N38/love2d.nvim',
+    cmd = 'LoveRun',
+    opts = {},
   },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
