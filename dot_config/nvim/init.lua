@@ -210,6 +210,12 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+vim.filetype.add {
+  extension = {
+    axaml = 'xml',
+  },
+}
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -658,6 +664,10 @@ require('lazy').setup({
             },
           },
         },
+        csharp_ls = {},
+        lemminx = {
+          filetypes = { 'xml', 'xsd', 'xsl', 'xslt', 'svg' },
+        },
       }
 
       -- Ensure the servers and tools above are installed
@@ -993,6 +1003,30 @@ require('lazy').setup({
           desc = '[E]xplore file browser',
         },
       },
+      config = function()
+        local actions = require 'telescope.actions'
+        local fb_actions = require('telescope').extensions.file_browser.actions
+
+        require('telescope').setup {
+          extensions = {
+            file_browser = {
+              mappings = {
+                i = {
+                  ['<C-t>'] = actions.select_tab,
+                  ['<C-z>'] = fb_actions.change_cwd,
+                },
+                n = {
+                  t = actions.select_tab,
+                  z = fb_actions.change_cwd,
+                },
+              },
+            },
+          },
+        }
+
+        -- Load the file_browser extension
+        require('telescope').load_extension 'file_browser'
+      end,
     },
   },
   {
@@ -1000,7 +1034,11 @@ require('lazy').setup({
     cmd = 'LoveRun',
     opts = {},
   },
-
+  {
+    'davidmh/mdx.nvim',
+    config = true,
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+  },
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
