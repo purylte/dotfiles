@@ -668,6 +668,7 @@ require('lazy').setup({
         lemminx = {
           filetypes = { 'xml', 'xsd', 'xsl', 'xslt', 'svg' },
         },
+        phpactor = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -683,6 +684,8 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua',
+        'phpcs',
+        'php-cs-fixer',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -737,7 +740,7 @@ require('lazy').setup({
         lua = { 'stylua' },
         go = { 'goimports', 'gofumpt' },
         templ = { 'templ', 'injected' },
-
+        php = { 'php_cs_fixer' },
         javascript = { 'biome' },
 
         -- Conform can also run multiple formatters sequentially
@@ -948,6 +951,7 @@ require('lazy').setup({
         'css',
         'javascript',
         'templ',
+        'php',
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
@@ -991,43 +995,6 @@ require('lazy').setup({
       },
       cmd = { 'RemoteStart' },
     },
-    {
-      'nvim-telescope/telescope-file-browser.nvim',
-      dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
-      keys = {
-        {
-          '<space>e',
-          function()
-            require('telescope').extensions.file_browser.file_browser()
-          end,
-          desc = '[E]xplore file browser',
-        },
-      },
-      config = function()
-        local actions = require 'telescope.actions'
-        local fb_actions = require('telescope').extensions.file_browser.actions
-
-        require('telescope').setup {
-          extensions = {
-            file_browser = {
-              mappings = {
-                i = {
-                  ['<C-t>'] = actions.select_tab,
-                  ['<C-z>'] = fb_actions.change_cwd,
-                },
-                n = {
-                  t = actions.select_tab,
-                  z = fb_actions.change_cwd,
-                },
-              },
-            },
-          },
-        }
-
-        -- Load the file_browser extension
-        require('telescope').load_extension 'file_browser'
-      end,
-    },
   },
   {
     'S1M0N38/love2d.nvim',
@@ -1048,11 +1015,11 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
